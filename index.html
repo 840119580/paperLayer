@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>维达抽纸尺寸对比工具</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #f0f5ff 0%, #e6f0ff 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(90deg, #1a6dba 0%, #008299 100%);
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            font-size: 2rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .content {
+            display: flex;
+            padding: 30px;
+            gap: 30px;
+        }
+        
+        .visualization-section {
+            flex: 6;
+            background: #f8fbfe;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .info-section {
+            flex: 4;
+            background: #f8fbfe;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        h2 {
+            color: #1a6dba;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e3f0ff;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        h2 i {
+            font-size: 1.4rem;
+            background: #e3f0ff;
+            padding: 8px;
+            border-radius: 50%;
+        }
+        
+        .scale-indicator {
+            background: #e3f0ff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        /* 重叠展示容器 */
+        .overlap-container {
+            position: relative;
+            height: 300px;
+            margin: 40px auto;
+            max-width: 800px;
+            border: 2px dashed #1a6dba;
+            border-radius: 8px;
+            background: repeating-linear-gradient(
+                45deg, 
+                #f0f8ff 0px, 
+                #f0f8ff 10px, 
+                #e6f2ff 10px, 
+                #e6f2ff 20px
+            );
+        }
+
+        .paper-layer {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            border: 2px solid;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .paper-layer:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+            z-index: 1000 !important;
+        }
+
+        .paper-layer.hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+            z-index: 1000 !important;
+        }
+
+        .size-label {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            text-align: bottom;
+        }
+        
+        .layer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .layer-btn {
+            padding: 10px 20px;
+            background: #1a6dba;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 120px;
+            justify-content: center;
+        }
+
+        .layer-btn.active {
+            background: #0d4a8a;
+            box-shadow: 0 0 0 2px #fff, 0 0 0 4px #1a6dba;
+        }
+        
+        .layer-btn i {
+            font-size: 1.1rem;
+        }
+        
+        /* 对比面板样式 */
+        .comparison-panel {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border-top: 4px solid #1a6dba;
+        }
+        
+        .comparison-header {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #1a6dba;
+            font-size: 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .size-comparison {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 25px;
+        }
+        
+        .size-card {
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            background: #e3f0ff;
+            width: 45%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .size-card h3 {
+            margin-bottom: 15px;
+            color: #1a6dba;
+        }
+        
+        .size-card .dimensions {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: #1a6dba;
+            color: white;
+            padding: 8px;
+            border-radius: 6px;
+        }
+        
+        .size-card .area {
+            font-size: 0.95rem;
+            color: #555;
+        }
+        
+        .difference-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .difference-card {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+        
+        .difference-card h3 {
+            margin-bottom: 15px;
+            color: #d35400;
+        }
+        
+        .difference-values {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+        }
+        
+        .diff-value {
+            text-align: center;
+        }
+        
+        .diff-value .number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #e17055;
+            margin-bottom: 5px;
+        }
+        
+        .diff-value .label {
+            font-size: 0.9rem;
+            color: #d35400;
+        }
+        
+        /* 信息卡片样式 */
+        .info-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid #1a6dba;
+        }
+        
+        .info-card h3 {
+            color: #1a6dba;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .info-card p {
+            margin-bottom: 10px;
+            padding-left: 10px;
+            border-left: 3px solid #e3f0ff;
+        }
+        
+        .info-card ul {
+            padding-left: 25px;
+            margin: 15px 0;
+        }
+        
+        .info-card li {
+            margin-bottom: 8px;
+        }
+        
+        .tip-card {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .tip-card h3 {
+            color: #0d47a1;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: #07273d;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 900px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .size-comparison {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+            
+            .size-card {
+                width: 100%;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .layer-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .layer-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-toilet-paper"></i>
+            </div>
+            <h1>维达抽纸尺寸对比工具</h1>
+            <p class="subtitle">基于左上角基准的重叠可视化展示，支持任意两个尺寸对比</p>
+        </header>
+        
+        <div class="content">
+            <div class="visualization-section">
+                <h2><i class="fas fa-ruler-combined"></i>尺寸重叠对比</h2>
+                
+                <div class="scale-indicator">
+                    <i class="fas fa-info-circle"></i>
+                    <p>基准点：所有尺寸左上角对齐 | 透明度随尺寸增大而降低</p>
+                </div>
+                
+                <!-- 重叠展示容器 -->
+                <div class="overlap-container">
+                    <!-- 各尺寸层（透明度递减） -->
+                    <div class="paper-layer" id="layer-xs" 
+                         style="width:120px; height:195px; 
+                                background: linear-gradient(135deg, rgba(26, 109, 186, 0.95) 0%, rgba(52, 152, 219, 0.95) 100%);
+                                border-color: #1a6dba;
+                                z-index: 40;">
+                        <div class="size-label">XS<br>120×195mm</div>
+                    </div>
+                    
+                    <div class="paper-layer" id="layer-s" 
+                         style="width:133px; height:195px; 
+                                background: linear-gradient(135deg, rgba(41, 136, 212, 0.85) 0%, rgba(72, 172, 240, 0.85) 100%);
+                                border-color: #2988d4;
+                                z-index: 30;">
+                        <div class="size-label">S<br>133×195mm</div>
+                    </div>
+
+                    <div class="paper-layer" id="layer-m-special" 
+                         style="width:153px; height:195px; 
+                                background: linear-gradient(135deg, rgba(60, 160, 224, 0.75) 0%, rgba(93, 173, 226, 0.75) 100%);
+                                border-color: #3ca0e0;
+                                z-index: 20;">
+                        <div class="size-label">M电商<br>153×195mm</div>
+                    </div>
+                    
+                    <div class="paper-layer" id="layer-m" 
+                         style="width:160px; height:195px; 
+                                background: linear-gradient(135deg, rgba(93, 184, 240, 0.65) 0%, rgba(127, 191, 232, 0.65) 100%);
+                                border-color: #5db8f0;
+                                z-index: 10;">
+                        <div class="size-label">M<br>160×195mm</div>
+                    </div>
+                    
+                    
+                    
+                    <div class="paper-layer" id="layer-l" 
+                         style="width:208px; height:226px; 
+                                background: linear-gradient(135deg, rgba(127, 207, 248, 0.55) 0%, rgba(162, 217, 246, 0.55) 100%);
+                                border-color: #7fcff8;
+                                z-index: 5;">
+                        <div class="size-label">L商用<br>208x226mm</div>
+                    </div>
+
+                    <div class="paper-layer" id="layer-xl" 
+                         style="width:222px; height:226px; 
+                                background: linear-gradient(135deg, rgba(138, 211, 248, 0.55) 0%, rgba(172, 221, 248, 0.55) 100%);
+                                border-color: #9cdcfc;
+                                z-index: 4;">
+                        <div class="size-label">XL商用<br>222x226mm</div>
+                    </div>
+                </div>
+                
+                <!-- 层级控制按钮 -->
+                <div class="layer-controls">
+                    <button class="layer-btn" id="btn-xs">
+                        <i class="fas fa-square"></i> XS
+                    </button>
+                    <button class="layer-btn" id="btn-s">
+                        <i class="fas fa-square"></i> S
+                    </button>
+                    <button class="layer-btn" id="btn-m-special">
+                        <i class="fas fa-square"></i> M电商
+                    </button>
+                    <button class="layer-btn" id="btn-m">
+                        <i class="fas fa-square"></i> M
+                    </button>
+                    
+                    <button class="layer-btn" id="btn-l">
+                        <i class="fas fa-square"></i> L商用
+                    </button>
+                    <button class="layer-btn" id="btn-xl">
+                        <i class="fas fa-square"></i> XL商用
+                    </button>
+                </div>
+                
+                <!-- 对比结果面板 -->
+                <div class="comparison-panel">
+                    <div class="comparison-header">
+                        <i class="fas fa-balance-scale"></i> 尺寸对比结果
+                    </div>
+                    
+                    <div class="size-comparison">
+                        <div class="size-card" id="size-card-1">
+                            <h3>尺寸 A</h3>
+                            <div class="dimensions">未选择</div>
+                            <div class="area">面积: -- mm²</div>
+                        </div>
+                        
+                        <div class="size-card" id="size-card-2">
+                            <h3>尺寸 B</h3>
+                            <div class="dimensions">未选择</div>
+                            <div class="area">面积: -- mm²</div>
+                        </div>
+                    </div>
+                    
+                    <div class="difference-container">
+                        <div class="difference-card">
+                            <h3><i class="fas fa-ruler"></i> 尺寸差异</h3>
+                            <p>选择两个尺寸进行对比分析</p>
+                            
+                            <div class="difference-values">
+                                <div class="diff-value">
+                                    <div class="number">--</div>
+                                    <div class="label">长度差 (mm)</div>
+                                </div>
+                                <div class="diff-value">
+                                    <div class="number">--</div>
+                                    <div class="label">宽度差 (mm)</div>
+                                </div>
+                                <div class="diff-value">
+                                    <div class="number">--</div>
+                                    <div class="label">面积差 (mm²)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-section">
+                <h2><i class="fas fa-info-circle"></i> 尺寸规格信息</h2>
+                
+                <div class="info-card">
+                    <h3><i class="fas fa-shopping-cart"></i> 平台一致性说明</h3>
+                    <p>• S码（133×195）在苏宁、京东、天猫等平台参数完全一致</p>
+                    <p>• M码存在两种尺寸：160×195（主流）和153×195（电商特供）</p>
+                    <p>• 电商特供M码尺寸略小但单包抽数提升（150抽 vs 常规130抽）</p>
+                </div>
+                
+                <div class="info-card">
+                    <h3><i class="fas fa-chart-line"></i> 历年尺寸变化</h3>
+                    <p>维达抽纸尺寸在近年保持了高度稳定性：</p>
+                    <ul>
+                        <li><strong>2018-2020</strong>: 仅有XS、S、M三种尺寸</li>
+                        <li><strong>2021年</strong>: 新增电商特供M码</li>
+                        <li><strong>2023年</strong>: 推出商用L码</li>
+                    </ul>
+                    <p>主流型号尺寸保持稳定，未发现缩水现象</p>
+                </div>
+                
+                <div class="info-card">
+                    <h3><i class="fas fa-building"></i> 商用特殊尺寸</h3>
+                    <p>• L码（208×226）专供酒店、餐厅等商用渠道</p>
+                    <p>• 采用更高克重纸质与加厚包装</p>
+                    <p>• 通常提供大容量包装（200抽以上）</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h3><i class="fas fa-lightbulb"></i> 使用提示</h3>
+                    <p>1. 点击左侧按钮选择两个尺寸进行对比</p>
+                    <p>2. 图表中尺寸采用左上角对齐方式展示</p>
+                    <p>3. 面积计算公式：尺寸长度 × 宽度</p>
+                    <p>4. 尺寸差异 = 较大尺寸 - 较小尺寸</p>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>数据来源：维达官方技术文档、主流电商平台商品参数（截至2025年7月） | 图示为比例展示，非实际产品外观</p>
+            <p>注：实际产品尺寸可能因生产批次有±2mm公差，建议以产品包装标注为准</p>
+            <p>Create by 寒树</p>
+        </footer>
+    </div>
+
+    <script>
+        // 尺寸数据
+        const sizes = {
+            xs: { width: 120, height: 195, name: "XS" },
+            s: { width: 133, height: 195, name: "S"},
+            m: { width: 160, height: 195, name: "M" },
+            "m-special": { width: 153, height: 195, name: "M电商" },
+            l: { width: 208, height: 226, name: "L商用" },
+            xl: { width: 222, height: 226, name: "XL商用" },
+        };
+        // 计算并设置 area 的值
+        for (const key in sizes) {
+            if (sizes.hasOwnProperty(key)) {
+                sizes[key].area = sizes[key].width * sizes[key].height;
+            }
+        }
+        // 当前选择的尺寸
+        let selectedSizes = [];
+        
+        // 初始化按钮事件
+        document.querySelectorAll('.layer-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const sizeId = this.id.replace('btn-', '');
+                
+                // 切换选择状态
+                if (this.classList.contains('active')) {
+                    this.classList.remove('active');
+                    selectedSizes = selectedSizes.filter(id => id !== sizeId);
+                } else {
+                    // 最多选择两个
+                    if (selectedSizes.length >= 2) {
+                        // alert('最多选择两个尺寸进行对比');
+                        // return;
+                    }
+                    
+                    this.classList.add('active');
+                    selectedSizes.push(sizeId);
+                }
+                
+                updateVisualization();
+                updateComparisonPanel();
+            });
+
+ // 添加鼠标悬停事件
+    button.addEventListener('mouseenter', function() {
+        const sizeId = this.id.replace('btn-', '');
+        const layer = document.getElementById('layer-' + sizeId);
+        if (layer) {
+            layer.classList.add('hover');
+        }
+    });
+
+    // 添加鼠标离开事件
+    button.addEventListener('mouseleave', function() {
+        const sizeId = this.id.replace('btn-', '');
+        const layer = document.getElementById('layer-' + sizeId);
+        if (layer) {
+            layer.classList.remove('hover');
+        }
+    });
+
+        });
+        
+        // 更新可视化显示
+        function updateVisualization() {
+            // 隐藏所有层
+            document.querySelectorAll('.paper-layer').forEach(layer => {
+                layer.style.display = 'none';
+            });
+            
+            // 显示选中的层
+            selectedSizes.forEach(id => {
+                document.getElementById(`layer-${id}`).style.display = 'flex';
+            });
+        }
+        
+        // 更新对比面板
+        function updateComparisonPanel() {
+            const sizeCard1 = document.getElementById('size-card-1');
+            const sizeCard2 = document.getElementById('size-card-2');
+            const diffValues = document.querySelectorAll('.diff-value .number');
+            const diffLabel = document.querySelector('.difference-card p');
+            
+            if (selectedSizes.length === 0) {
+                sizeCard1.querySelector('.dimensions').textContent = '未选择';
+                sizeCard1.querySelector('.area').textContent = '面积: -- mm²';
+                sizeCard2.querySelector('.dimensions').textContent = '未选择';
+                sizeCard2.querySelector('.area').textContent = '面积: -- mm²';
+                
+                diffValues[0].textContent = '--';
+                diffValues[1].textContent = '--';
+                diffValues[2].textContent = '--';
+                diffLabel.textContent = '选择两个尺寸进行对比分析';
+                return;
+            }
+            
+            // 更新尺寸卡片1
+            const size1 = sizes[selectedSizes[0]];
+            sizeCard1.querySelector('.dimensions').textContent = `${size1.width}×${size1.height}mm`;
+            sizeCard1.querySelector('.area').textContent = `面积: ${size1.area.toLocaleString()} mm²`;
+            
+            // 更新尺寸卡片2
+            if (selectedSizes.length > 1) {
+                const size2 = sizes[selectedSizes[1]];
+                sizeCard2.querySelector('.dimensions').textContent = `${size2.width}×${size2.height}mm`;
+                sizeCard2.querySelector('.area').textContent = `面积: ${size2.area.toLocaleString()} mm²`;
+                
+                // 计算差异
+                const widthDiff = Math.abs(size1.width - size2.width);
+                const heightDiff = Math.abs(size1.height - size2.height);
+                const areaDiff = Math.abs(size1.area - size2.area);
+                
+                diffValues[0].textContent = widthDiff;
+                diffValues[1].textContent = heightDiff;
+                diffValues[2].textContent = areaDiff.toLocaleString();
+                diffLabel.textContent = `对比分析：${size1.name} 与 ${size2.name}`;
+            } else {
+                sizeCard2.querySelector('.dimensions').textContent = '未选择';
+                sizeCard2.querySelector('.area').textContent = '面积: -- mm²';
+                
+                diffValues[0].textContent = '--';
+                diffValues[1].textContent = '--';
+                diffValues[2].textContent = '--';
+                diffLabel.textContent = '请再选择一个尺寸进行对比';
+            }
+        }
+        
+        // 默认选择两个尺寸
+        setTimeout(() => {
+            document.getElementById('btn-xs').classList.add('active');
+            document.getElementById('btn-s').classList.add('active');
+            selectedSizes = ['xs', 's'];
+            updateVisualization();
+            updateComparisonPanel();
+        }, 500);
+    </script>
+</body>
+</html>
