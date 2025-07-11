@@ -1,0 +1,509 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans SC', sans-serif;
+    background: linear-gradient(135deg, #f0f5ff 0%, #e6f0ff 100%);
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+}
+
+header {
+    background: linear-gradient(90deg, #1a6dba 0%, #008299 100%);
+    color: white;
+    padding: 30px 40px;
+    text-align: center;
+    position: relative;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.logo {
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    font-size: 2rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.content {
+    display: flex;
+    padding: 30px;
+    gap: 30px;
+}
+
+.visualization-section {
+    flex: 6;
+    background: #f8fbfe;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.info-section {
+    flex: 4;
+    background: #f8fbfe;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+h2 {
+    color: #1a6dba;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e3f0ff;
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+h2 i {
+    font-size: 1.4rem;
+    background: #e3f0ff;
+    padding: 8px;
+    border-radius: 50%;
+}
+
+.scale-indicator {
+    background: #e3f0ff;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    text-align: center;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* 重叠展示容器 */
+.overlap-container {
+    position: relative;
+    height: 300px;
+    margin: 40px auto;
+    max-width: 800px;
+    border: 2px dashed #1a6dba;
+    border-radius: 8px;
+    background: repeating-linear-gradient(
+        45deg, 
+        #f0f8ff 0px, 
+        #f0f8ff 10px, 
+        #e6f2ff 10px, 
+        #e6f2ff 20px
+    );
+}
+
+.paper-layer {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    border: 2px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.paper-layer:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+    z-index: 1000 !important;
+}
+
+.paper-layer.hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+    z-index: 1000 !important;
+}
+
+.size-label {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 8px 15px;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    text-align: bottom;
+}
+
+<!-- .layer-controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+} -->
+
+.layer-controls-weida {
+    border: 2px dashed #1a6dba;
+    background-color: rgba(178, 255, 255, 0.2); /* 半透明青色，透明度20% */
+    border-radius: 20px; /* 圆角20px */
+    padding: 10px; /* 添加一些内边距让按钮看起来更舒适 */
+    display: flex; /* 让按钮水平排列 */
+    flex-wrap: wrap; /* 如果空间不足可以换行 */
+    gap: 8px; /* 按钮之间的间距 */
+    margin: 10px 0; /* 上下外边距 */
+}
+
+.layer-controls-weida p {
+    border: 2px dashed #1a6dba;
+    padding: 8px 12px;
+    border-radius: 12px 12px 12px 12px;
+    margin: 0 0 4px 0;
+    color: #1a6dba;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.layer-controls-qingfeng {
+    border: 2px dashed #f5bd4d;
+    background-color: rgba(255, 237, 178, 0.2); /* 半透明青色，透明度20% */
+    border-radius: 20px; /* 圆角20px */
+    padding: 10px; /* 添加一些内边距让按钮看起来更舒适 */
+    display: flex; /* 让按钮水平排列 */
+    flex-wrap: wrap; /* 如果空间不足可以换行 */
+    gap: 8px; /* 按钮之间的间距 */
+
+}
+
+.inside {
+    border: 2px dashed #f5bd4d;
+    background-color: rgba(255, 237, 178, 0.2); /* 半透明青色，透明度20% */
+    border-radius: 10px; /* 圆角20px */
+    padding: 8px; /* 添加一些内边距让按钮看起来更舒适 */
+    display: flex; /* 让按钮水平排列 */
+    flex-wrap: wrap; /* 如果空间不足可以换行 */
+    flex: auto;
+    gap: 8px; /* 按钮之间的间距 */
+}
+
+.layer-controls-qingfeng .inside{
+    width: 49%;
+}
+
+.layer-controls-qingfeng p {
+    border: 2px dashed #feca62;
+    padding: 8px 12px;
+    border-radius: 12px 12px 12px 12px;
+    margin: 0 0 4px 0;
+    color: #f1b63e;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.layer-controls-qingfeng .layer-btn{
+    padding: 10px 15px;
+    background: #f3b02bda;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 80px;
+    justify-content: center;
+}
+
+.layer-controls-qingfeng .product-title {
+    color: #f1b63e;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+}
+
+.layer-btn {
+    padding: 10px 15px;
+    background: #1a6dba;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 80px;
+    justify-content: center;
+}
+
+.layer-btn.active {
+    background: #03b603ad;
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px #03b603ad;
+}
+
+.layer-btn i {
+    font-size: 1.1rem;
+}
+
+
+
+/* 对比面板样式 */
+.comparison-panel {
+    background: white;
+    border-radius: 10px;
+    padding: 25px;
+    margin-top: 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    border-top: 4px solid #1a6dba;
+}
+
+.comparison-header {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #1a6dba;
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.size-comparison {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 25px;
+}
+
+.size-card {
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px;
+    background: #e3f0ff;
+    width: 45%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.size-card h3 {
+    margin-bottom: 15px;
+    color: #1a6dba;
+}
+
+.size-card .dimensions {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    background: #1a6dba;
+    color: white;
+    padding: 8px;
+    border-radius: 6px;
+}
+
+.size-card .area {
+    font-size: 0.95rem;
+    color: #555;
+}
+
+.difference-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.difference-card {
+    background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    width: 100%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.difference-card h3 {
+    margin-bottom: 15px;
+    color: #d35400;
+}
+
+.difference-values {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 15px;
+}
+
+.diff-value {
+    text-align: center;
+}
+
+.diff-value .number {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #e17055;
+    margin-bottom: 5px;
+}
+
+.diff-value .label {
+    font-size: 0.9rem;
+    color: #d35400;
+}
+
+/* 信息卡片样式 */
+.info-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    border-left: 4px solid #1a6dba;
+}
+
+.info-card h3 {
+    color: #1a6dba;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.info-card p {
+    margin-bottom: 10px;
+    padding-left: 10px;
+    border-left: 3px solid #e3f0ff;
+}
+
+.info-card ul {
+    padding-left: 25px;
+    margin: 15px 0;
+}
+
+.info-card li {
+    margin-bottom: 8px;
+}
+
+.tip-card {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.tip-card h3 {
+    color: #0d47a1;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    background: #07273d;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+}
+
+@media (max-width: 900px) {
+    .content {
+        flex-direction: column;
+    }
+    
+    .size-comparison {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .size-card {
+        width: 100%;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+    
+    .layer-controls {
+        display: flex;
+        flex-direction: column; /* 垂直排列 */
+        align-items: center;   /* 水平居中 */
+    }
+    
+    .layer-btn {
+        width: 48%;
+    }
+    
+    @media (max-width: 400px) {
+        h1 {
+            font-size: 1.5rem;
+        }
+        
+        .layer-controls {
+            display: flex;
+            flex-direction: column; /* 垂直排列 */
+            align-items: center;   /* 水平居中 */
+        }
+        
+        .layer-btn {
+            width: 100%;
+        }
+    }
+
+    
+}
+
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
